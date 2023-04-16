@@ -2,11 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Pagination, PaginationItem } from '@/components/Pagination';
 import { IPersonList } from '@/models/IPerson';
-import { PersonCard } from './PersonCard';
+import { createArray } from '@/utils/array';
 import { useHighlight } from './useHighlight';
+import { PersonCard } from './PersonCard';
 import styles from './PersonList.module.css';
-
-const createArray = (length: number): number[] => Array.from({ length }, (_, i) => i + 1);
 
 interface PersonListProps {
   className?: string;
@@ -20,7 +19,9 @@ export const PersonList = ({ className, personList, currentPage, limit, highligh
   const listRef = useRef<HTMLUListElement>(null);
   const { highlightingId } = useHighlight({ listRef, highlightId });
 
-  const pages = useMemo(() => createArray(Math.ceil(personList.count / limit)), [personList.count, limit]);
+  const pages = useMemo(() => {
+      return createArray(Math.ceil(personList.count / limit)).map(i => i + 1);
+  }, [personList.count, limit]);
 
   const handlePageSelect = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -40,7 +41,7 @@ export const PersonList = ({ className, personList, currentPage, limit, highligh
           {pages.map(page => (
             <PaginationItem
               key={page}
-              active={page === currentPage}
+              active={page === currentPage || (!currentPage && page === 1)}
               href={page === 1 ? '' : `?page=${page}`}
               shallow={true}
               onClick={handlePageSelect}

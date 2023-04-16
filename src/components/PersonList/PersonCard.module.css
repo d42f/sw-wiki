@@ -18,17 +18,39 @@
     overflow: hidden;
 }
 
-.avatar {
+.logo {
   grid-area: avatar;
+  display: flex;
+  text-decoration: none;
+}
+
+.avatar {
+  width: 100%;
   border-radius: calc(var(--person-card-border-radius) - var(--person-card-padding));
 }
 
 .title {
   grid-area: title;
-  margin: 0;
+  display: flex;
+  flex-flow: column;
   font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.titlePlaceholder {
+  width: 10rem;
+  height: calc(1.25rem * 1.2);
 }
 
 .description {
   grid-area: description;
+  display: flex;
+  flex-flow: column;
+}
+
+.descriptionRowPlaceholder {
+  width: 16rem;
+  height: calc(var(--bs-body-font-size) * var(--bs-body-line-height));
+  margin-bottom: 0.5rem;
 }

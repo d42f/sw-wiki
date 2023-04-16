@@ -1,8 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import classNames from 'classnames';
 import { Avatar } from '@/components/Avatar';
-import { IPerson } from '@/models/IPerson';
 import { BlackLink } from '@/components/Link';
+import { IPerson } from '@/models/IPerson';
+import { getRouterUrl } from '@/utils/router';
 import { PersonDescription } from './PersonDescription';
 import styles from './PersonCard.module.css';
 
@@ -14,10 +16,12 @@ interface PersonCardProps {
 
 export const PersonCard = ({ className, person, page }: PersonCardProps): JSX.Element => (
   <div className={classNames(styles.wrapper, className)}>
-    <Avatar className={styles.avatar} value={person.name} />
+    <Link className={styles.logo} href={getRouterUrl(`/person/${person.id}`, { page })}>
+      <Avatar className={styles.avatar} value={person.name} />
+    </Link>
     <BlackLink
-      className={classNames('h5', styles.title)}
-      href={`/person/${person.id}${page ? `?page=${page}` : ''}`}
+      className={styles.title}
+      href={getRouterUrl(`/person/${person.id}`, { page })}
     >
       {person.name}
     </BlackLink>

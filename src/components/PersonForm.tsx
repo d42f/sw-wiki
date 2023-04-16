@@ -29,6 +29,11 @@ const FIELDS: Field[] = [
     options: Object.entries(PersonGender).map(([ label, value ]) => ({ value, label })),
   },
   {
+    id: 'birth_year',
+    label: 'Birth year',
+    placeholder: 'Enter birth year',
+  },
+  {
     id: 'hair_color',
     label: 'Hair color',
     placeholder: 'Enter hair color',

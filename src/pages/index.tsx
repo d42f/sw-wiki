@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { PageNavbar } from '@/components/PageNavbar';
 import { PageContainer } from '@/components/PageContainer';
-import { PersonList } from '@/components/PersonList';
+import { PersonList, PersonListPlaceholder } from '@/components/PersonList';
+import { IPersonList } from '@/models/IPerson';
 import { useGetPersonListQuery } from '@/store/personsSlice';
 import { getRouterUrl } from '@/utils/router';
 
@@ -29,13 +30,13 @@ export default function Home() {
     <>
       <PageNavbar />
       <PageContainer {...PAGE_CONTAINER_POS}>
-      {isLoading ? (
-          <span>Loading...</span>
+      {isLoading || true ? (
+          <PersonListPlaceholder />
         ) : !personList?.results.length ? (
           <span>No data</span>
         ) : (
           <PersonList
-            personList={personList}
+            personList={personList as IPersonList}
             currentPage={currentPage}
             limit={PAGE_LIMIT}
             highlightId={query.highlighting as string}

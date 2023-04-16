@@ -7,10 +7,10 @@ const getLabel = (value: string): string =>
 
 interface AvatarProps {
   className?: string;
-  value: string;
+  value?: string;
 }
 
 export const Avatar = ({ className, value }: AvatarProps): JSX.Element => {
   const label = useMemo(() => getLabel(value), [value]);
-  return <div className={classNames(styles.wrapper, className)}>{label}</div>;
+  return <span className={classNames(styles.wrapper, className)}>{label}</span>;
 };
