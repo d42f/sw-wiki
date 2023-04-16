@@ -30,7 +30,7 @@ export default function Home() {
     <>
       <PageNavbar />
       <PageContainer {...PAGE_CONTAINER_POS}>
-      {isLoading || true ? (
+      {isLoading ? (
           <PersonListPlaceholder />
         ) : !personList?.results.length ? (
           <span>No data</span>
