@@ -1,0 +1,34 @@
+.wrapper {
+  --person-card-padding: 0.25rem;
+  --person-card-border-radius: 0.5rem;
+  --person-card-color: var(--bs-body-color);
+  --person-card-bg: var(---bs-body-bg);
+  --person-card-border-color: var(--bs-gray-500);
+
+  display: grid;
+  grid-template-areas:
+        'avatar title       .'
+        'avatar description description';
+    grid-template-columns: 6rem auto 1fr;
+    gap: 1rem;
+    padding: 0.25rem;
+    background-color: var(--bs-white);
+    border: 1px solid var(--person-card-border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.avatar {
+  grid-area: avatar;
+  border-radius: calc(var(--person-card-border-radius) - var(--person-card-padding));
+}
+
+.title {
+  grid-area: title;
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.description {
+  grid-area: description;
+}
