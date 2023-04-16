@@ -7,7 +7,7 @@ const getLabel = (value: string): string =>
 
 interface AvatarProps {
   className?: string;
-  value?: string;
+  value: string;
 }
 
 export const Avatar = ({ className, value }: AvatarProps): JSX.Element => {
