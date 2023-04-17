@@ -18,6 +18,7 @@ const person: IPerson = {
   mass: 77,
   name: 'Luke Skywalker',
   skin_color: 'fair',
+  url: '/api/people/1/',
 };
 
 describe('<PersonForm />', () => {

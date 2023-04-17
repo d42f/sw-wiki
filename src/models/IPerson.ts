@@ -15,6 +15,7 @@ export interface IPerson {
   mass: number;
   name: string;
   skin_color: string;
+  url: string;
 }
 
 export interface IPersonList {
