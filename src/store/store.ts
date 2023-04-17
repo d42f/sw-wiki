@@ -12,10 +12,12 @@ const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware, errorHandlerMiddleware),
+export const makeStore = () => configureStore({
+    reducer: rootReducer,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware, errorHandlerMiddleware),
 });
+
+export const store = makeStore();
 
 export type AppState = ReturnType<typeof store.getState>;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { IPerson, PersonGender } from '@/models/IPerson';
@@ -70,7 +70,7 @@ export const PersonForm = ({ className, value, onSave, onClose }: PersonFormProp
   const { register, formState: { errors }, handleSubmit } = useForm<IPerson>({ defaultValues: value });
 
   return (
-    <Form className={className} onSubmit={handleSubmit(onSave)}>
+    <Form className={className} onSubmit={handleSubmit(data => onSave(data))}>
       <h2 className={styles.title}>{value.name}</h2>
       {FIELDS.map(({ id, type = 'text', label, placeholder, required = false, options = [], size = 10 }) => (
         <Form.Group key={id} className={styles.group} as={Row}>
@@ -79,12 +79,13 @@ export const PersonForm = ({ className, value, onSave, onClose }: PersonFormProp
             {type === 'text' || type === 'number' ? (
               <Form.Control
                 type={type}
+                role={id}
                 placeholder={placeholder}
                 isInvalid={!!errors[id]}
                 {...register(id, { required, valueAsNumber: type === 'number' })}
               />
             ) : type === 'select' ? (
-              <Form.Select {...register(id)}>
+              <Form.Select role={id} {...register(id)}>
                 {options.map(({ value, label }) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -102,7 +103,7 @@ export const PersonForm = ({ className, value, onSave, onClose }: PersonFormProp
       ))}
 
       <div className={styles.footer}>
-        <Button variant="primary" type="submit">Save</Button>
+        <Button variant="primary" type="submit" role="submit">Save</Button>
         <Button variant="light" type="button" onClick={onClose}>Cancel</Button>
       </div>
     </Form>
