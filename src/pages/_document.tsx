@@ -44,7 +44,7 @@ export default class MyDocument extends Document<DocumentProps> {
           <meta name="description" content={appName} />
           <meta name="author" content={author} />
           <link rel="icon" href="/favicon.ico" />
-          // <script async src="//l.getsitecontrol.com/s/94myx8o4.js" />
+          {/* <script async src="//l.getsitecontrol.com/s/94myx8o4.js" /> */}
         </Head>
         <body>
           <Main />
