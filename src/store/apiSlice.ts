@@ -4,6 +4,7 @@ import { isHydrateAction } from '@/utils/store';
 import { AppState, AppThunk } from './store';
 import { IPerson, IPersonList } from '@/models/IPerson';
 import { Draft } from '@reduxjs/toolkit';
+import { IComment, IRawComment } from '@/models/IComment';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -15,7 +16,7 @@ export const apiSlice = createApi({
       return action.payload[reducerPath];
     }
   },
-  tagTypes: ['PersonList', 'Person'],
+  tagTypes: ['PersonList', 'Person', 'PersonComments'],
   endpoints: (builder) => ({
     getPersonList: builder.query<IPersonList, number>({
       query: (page) => `${API_PEOPLE_URL}?page=${page}`,
@@ -43,6 +44,26 @@ export const apiSlice = createApi({
           dispatch(updatePersonListQueryData(patchedPerson));
           dispatch(updatePersonQueryData(patchedPerson));
         }
+      },
+    }),
+
+    getPersonComments: builder.query<IComment[], string>({
+      query: (id) => `${API_PEOPLE_URL}/${id}/comments`,
+      providesTags: (result, error, id) => [{ type: 'PersonComments', id }],
+    }),
+
+    addPersonComment: builder.mutation<
+      IComment,
+      { id: string; comment: IRawComment }
+    >({
+      query: ({ id, comment }) => ({
+        url: `${API_PEOPLE_URL}/${id}/comments`,
+        method: 'POST',
+        body: comment,
+      }),
+      onQueryStarted: async ({ id }, { dispatch, queryFulfilled }) => {
+        const comment = (await queryFulfilled).data;
+        dispatch(updatePersonCommentsQueryData({ id, comment }));
       },
     }),
   }),
@@ -83,10 +104,31 @@ const updatePersonQueryData =
       }))
     );
 
+const updatePersonCommentsQueryData =
+  ({ id, comment }: { id: string; comment: IComment }): AppThunk<void> =>
+  (dispatch, getState) => {
+    for (const { endpointName, originalArgs } of selectInvalidatedBy(
+      getState() as AppState,
+      [{ type: 'PersonComments', id }]
+    )) {
+      if (endpointName === 'getPersonComments') {
+        dispatch(
+          updateQueryData(
+            endpointName,
+            originalArgs,
+            (draft: Draft<IComment[]>) => [comment, ...draft]
+          )
+        );
+      }
+    }
+  };
+
 export const {
   useGetPersonListQuery,
   useGetPersonQuery,
   useUpdatePersonMutation,
+  useGetPersonCommentsQuery,
+  useAddPersonCommentMutation,
   util: { getRunningQueriesThunk },
 } = apiSlice;
 

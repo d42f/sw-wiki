@@ -1,17 +1,22 @@
 import cacheData from 'memory-cache';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { API_BASE_URL, API_PEOPLE_URL } from '@/constants';
 import { IPerson, IPersonList } from '@/models/IPerson';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { IComment, IRawComment } from '@/models/IComment';
 import { getPersonId } from '@/utils/person';
+import { getUuid } from '@/utils/uuid';
 
 const LIST_CACHE: Record<string, IPersonList> =
   cacheData.get('LIST_CACHE') || {};
 const PERSON_CACHE: Record<string, IPerson> =
   cacheData.get('PERSON_CACHE') || {};
+const COMMENTS_CACHE: Record<string, IComment[]> =
+  cacheData.get('COMMENTS_CACHE') || {};
 
 const saveCache = () => {
   cacheData.put('LIST_CACHE', LIST_CACHE);
   cacheData.put('PERSON_CACHE', PERSON_CACHE);
+  cacheData.put('COMMENTS_CACHE', COMMENTS_CACHE);
 };
 
 const getPeople = async (page: string, res: NextApiResponse) => {
@@ -56,11 +61,37 @@ const updatePerson = async (person: IPerson, res: NextApiResponse) => {
   res.status(200).json(person);
 };
 
+const getComments = async (id: string, res: NextApiResponse) => {
+  if (!COMMENTS_CACHE[id]) {
+    COMMENTS_CACHE[id] = [];
+  }
+  res.status(200).json(COMMENTS_CACHE[id]);
+};
+
+const addComment = async (
+  id: string,
+  comment: IRawComment,
+  res: NextApiResponse
+) => {
+  if (!COMMENTS_CACHE[id]) {
+    COMMENTS_CACHE[id] = [];
+  }
+  const data = {
+    ...comment,
+    id: getUuid(),
+    date: new Date().toISOString(),
+  };
+  COMMENTS_CACHE[id].unshift(data);
+  saveCache();
+  res.status(200).json(data);
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (!req.query.slug) {
+  const slug = Array.isArray(req.query.slug) ? req.query.slug : undefined;
+  if (!slug) {
     switch (req.method?.toLowerCase()) {
       case 'get':
         const page = req.query.page as string;
@@ -69,10 +100,22 @@ export default async function handler(
       default:
         res.status(400).json({ message: 'Invalid method.' });
     }
-  } else {
+  } else if (slug.includes('comments')) {
+    const id = slug[0];
     switch (req.method?.toLowerCase()) {
       case 'get':
-        const id = req.query.slug.toString();
+        await getComments(id, res);
+        break;
+      case 'post':
+        await addComment(id, req.body as IComment, res);
+        break;
+      default:
+        res.status(400).json({ message: 'Invalid method.' });
+    }
+  } else {
+    const id = slug[0];
+    switch (req.method?.toLowerCase()) {
+      case 'get':
         await getPerson(id, res);
         break;
       case 'put':

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { Card, Stack } from 'react-bootstrap';
 import { PERSON_LIST_ROUTE } from '@/constants';
 import { PageNavbar, PageNavbarLink } from '@/components/PageNavbar';
 import { PageContainer } from '@/components/PageContainer';
@@ -9,11 +10,16 @@ import { wrapper } from '@/store';
 import {
   getPerson,
   getRunningQueriesThunk,
+  useAddPersonCommentMutation,
+  useGetPersonCommentsQuery,
   useGetPersonQuery,
   useUpdatePersonMutation,
 } from '@/store/apiSlice';
 import { getRouterUrl } from '@/utils/router';
 import { isString } from '@/utils/string';
+import { CommentForm } from '@/components/CommentForm';
+import { IRawComment } from '@/models/IComment';
+import { CommentList } from '@/components/CommentList';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -30,19 +36,33 @@ export default function Person() {
   const { isReady, query, push } = useRouter();
   const id = (query.id || '').toString();
   const page = (query.page || '').toString();
-  const { data: person, isLoading } = useGetPersonQuery(id, {
+
+  const { data: person, isLoading: isPersonLoading } = useGetPersonQuery(id, {
     skip: !isReady || !id,
   });
+
+  const { data: comments, isLoading } = useGetPersonCommentsQuery(id, {
+    skip: !person,
+  });
+
   const [updatePerson] = useUpdatePersonMutation();
+  const [addPersonComment, { isLoading: isCommentLoading }] =
+    useAddPersonCommentMutation();
 
   const backLink = useMemo(
     () => getRouterUrl(PERSON_LIST_ROUTE, { page }),
     [page]
   );
 
-  const handleSave = async (patch: IPerson) => {
+  const handlePersonSave = async (patch: IPerson) => {
     await updatePerson({ id, patch });
     push(getRouterUrl(PERSON_LIST_ROUTE, { page, highlighting: id }));
+  };
+
+  const handleCommentSave = async (comment: IRawComment) => {
+    if (person) {
+      addPersonComment({ id: person.id, comment });
+    }
   };
 
   return (
@@ -51,16 +71,28 @@ export default function Person() {
         <PageNavbarLink href={backLink}>← Back</PageNavbarLink>
       </PageNavbar>
       <PageContainer lg={{ span: 8, offset: 2 }} xl={{ span: 6, offset: 3 }}>
-        {!isReady || isLoading ? (
+        {!isReady || isPersonLoading ? (
           <span>Loading...</span>
         ) : !person ? (
           <span>Invalid link</span>
         ) : (
-          <PersonForm
-            value={person}
-            onSave={handleSave}
-            onClose={() => push(backLink)}
-          />
+          <Stack gap={5}>
+            <PersonForm
+              value={person}
+              onSave={handlePersonSave}
+              onClose={() => push(backLink)}
+            />
+            <Card>
+              {<Card.Header>Add comment</Card.Header>}
+              <Card.Body>
+                <CommentForm
+                  disabled={isCommentLoading}
+                  onSave={handleCommentSave}
+                />
+              </Card.Body>
+            </Card>
+            {comments && <CommentList comments={comments} />}
+          </Stack>
         )}
       </PageContainer>
     </>

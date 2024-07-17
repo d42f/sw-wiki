@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import classNames from 'classnames';
 import { IPerson, EPersonGender } from '@/models/IPerson';
 import styles from './PersonForm.module.css';
 import { IFormField } from '@/models/IForm';
@@ -73,7 +74,10 @@ export const PersonForm = ({
   } = useForm<IPerson>({ defaultValues: value });
 
   return (
-    <Form className={className} onSubmit={handleSubmit((data) => onSave(data))}>
+    <Form
+      className={classNames(styles.form, className)}
+      onSubmit={handleSubmit((data) => onSave(data))}
+    >
       <h2 className={styles.title}>{value.name}</h2>
       {FIELDS.map(
         ({
@@ -85,7 +89,7 @@ export const PersonForm = ({
           options = [],
           size = 10,
         }) => (
-          <Form.Group key={id} className={styles.group} as={Row}>
+          <Form.Group key={id} as={Row}>
             <Form.Label column sm={2}>
               {label}
             </Form.Label>
