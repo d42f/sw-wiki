@@ -71,7 +71,7 @@ export default function Person() {
         <PageNavbarLink href={backLink}>← Back</PageNavbarLink>
       </PageNavbar>
       <PageContainer lg={{ span: 8, offset: 2 }} xl={{ span: 6, offset: 3 }}>
-        {!isReady || isPersonLoading || 1 ? (
+        {!isReady || isPersonLoading ? (
           <PersonFormPlaceholder />
         ) : !person ? (
           <span>Invalid link</span>
