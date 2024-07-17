@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 
 interface useHighlightProps {
   listRef: RefObject<HTMLElement>;
-  highlightId: string;
+  highlightId?: string;
 }
 
 export const useHighlight = ({ listRef, highlightId }: useHighlightProps) => {

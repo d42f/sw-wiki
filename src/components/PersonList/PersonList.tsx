@@ -12,7 +12,7 @@ interface PersonListProps {
   personList: IPersonList;
   currentPage: number;
   limit: number;
-  highlightId: string;
+  highlightId?: string;
 }
 
 export const PersonList = ({
