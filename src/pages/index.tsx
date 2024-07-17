@@ -10,27 +10,28 @@ import { getRouterUrl } from '@/utils/router';
 const START_PAGE = 1;
 const PAGE_LIMIT = 10;
 
-const PAGE_CONTAINER_POS = {
-  lg: { span: 10, offset: 1 },
-  xl: { span: 8, offset: 2 },
-};
-
 export default function Home() {
   const { route, query, replace } = useRouter();
   const currentPage = query.page && isFinite(+query.page) ? +query.page : 0;
-  const { data: personList, isLoading, isFetching } = useGetPersonListQuery(currentPage || START_PAGE);
+  const { data: personList, isLoading } = useGetPersonListQuery(
+    currentPage || START_PAGE
+  );
 
   useEffect(() => {
     if (query.highlighting) {
-      replace(getRouterUrl(route, { ...query, highlighting: undefined }), undefined, { shallow: true });
+      replace(
+        getRouterUrl(route, { ...query, highlighting: undefined }),
+        undefined,
+        { shallow: true }
+      );
     }
   }, [route, query, replace]);
 
   return (
     <>
       <PageNavbar />
-      <PageContainer {...PAGE_CONTAINER_POS}>
-      {isLoading ? (
+      <PageContainer lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
+        {isLoading ? (
           <PersonListPlaceholder />
         ) : !personList?.results.length ? (
           <span>No data</span>
@@ -44,5 +45,5 @@ export default function Home() {
         )}
       </PageContainer>
     </>
-  )
+  );
 }

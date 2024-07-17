@@ -1,4 +1,4 @@
-export enum PersonGender {
+export enum EPersonGender {
   Male = 'male',
   Female = 'female',
   Unknown = 'unknown',
@@ -9,9 +9,9 @@ export interface IPerson {
   id: string;
   birth_year: string;
   eye_color: string;
-  gender: PersonGender;
+  gender: EPersonGender;
   hair_color: string;
-  height: number,
+  height: number;
   mass: number;
   name: string;
   skin_color: string;

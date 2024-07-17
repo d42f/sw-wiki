@@ -8,9 +8,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Head>
-        <title>SW Wiki app</title>
+        <title>SW Wiki</title>
       </Head>
       <Component {...pageProps} />
     </Provider>
-  )
+  );
 }

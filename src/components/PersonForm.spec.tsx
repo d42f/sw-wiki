@@ -56,6 +56,8 @@ describe('<PersonForm />', () => {
     await user.clear(screen.getByRole('name'));
     await user.type(screen.getByRole('name'), newName);
     await user.click(screen.getByRole('submit'));
-    expect(onSaveMock).toHaveBeenCalledWith(expect.objectContaining({ name: newName }));
+    expect(onSaveMock).toHaveBeenCalledWith(
+      expect.objectContaining({ name: newName })
+    );
   });
 });

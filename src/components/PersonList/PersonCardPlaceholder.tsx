@@ -7,7 +7,9 @@ interface PersonCardPlaceholderProps {
   className?: string;
 }
 
-export const PersonCardPlaceholder = ({ className }: PersonCardPlaceholderProps): JSX.Element => (
+export const PersonCardPlaceholder = ({
+  className,
+}: PersonCardPlaceholderProps): JSX.Element => (
   <div className={classNames(styles.wrapper, className)}>
     <Placeholder className={styles.logo} animation="glow">
       <Placeholder className={styles.avatar} />

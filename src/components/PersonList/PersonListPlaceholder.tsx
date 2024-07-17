@@ -6,16 +6,20 @@ import styles from './PersonList.module.css';
 
 interface PersonListPlaceholderProps {
   className?: string;
+  cards?: number;
 }
 
-export const PersonListPlaceholder = ({ className }: PersonListPlaceholderProps): JSX.Element => {
-  const cards = useMemo(() => createArray(2), []);
+export const PersonListPlaceholder = ({
+  className,
+  cards: originalCards = 3,
+}: PersonListPlaceholderProps): JSX.Element => {
+  const cards = useMemo(() => createArray(originalCards), [originalCards]);
 
   return (
     <div className={classNames(styles.wrapper, className)}>
       <ul className={styles.list}>
-        {cards.map(i => (
-          <li className={classNames(styles.item)} key={i}>
+        {cards.map((i) => (
+          <li className={styles.item} key={i}>
             <PersonCardPlaceholder />
           </li>
         ))}

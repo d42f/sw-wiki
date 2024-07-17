@@ -1,4 +1,11 @@
-import Document, { DocumentContext, DocumentInitialProps, Head, Html, Main, NextScript } from 'next/document';
+import Document, {
+  DocumentContext,
+  DocumentInitialProps,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document';
 
 interface DocumentAdditionalProps {
   languageDirection: string;
@@ -17,9 +24,9 @@ export default class MyDocument extends Document<DocumentProps> {
     context.renderPage = () =>
       originalRenderPage({
         // Useful for wrapping the whole react tree
-        enhanceApp: App => App,
+        enhanceApp: (App) => App,
         // Useful for wrapping in a per-page basis
-        enhanceComponent: Component => Component,
+        enhanceComponent: (Component) => Component,
       });
 
     // Run the parent `getInitialProps`, it now includes the custom `renderPage`
@@ -36,7 +43,7 @@ export default class MyDocument extends Document<DocumentProps> {
   }
 
   render() {
-    const { appName, author,language, languageDirection } = this.props;
+    const { appName, author, language, languageDirection } = this.props;
 
     return (
       <Html lang={language} dir={languageDirection}>
@@ -44,7 +51,6 @@ export default class MyDocument extends Document<DocumentProps> {
           <meta name="description" content={appName} />
           <meta name="author" content={author} />
           <link rel="icon" href="/favicon.ico" />
-          {/* <script async src="//l.getsitecontrol.com/s/94myx8o4.js" /> */}
         </Head>
         <body>
           <Main />
