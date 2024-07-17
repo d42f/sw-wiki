@@ -1,5 +1,4 @@
-export const API_BASE_URL = 'https://swapi.dev/api';
-export const API_PEOPLE_URL = '/people';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_LOCAL_API_URL;
 
 export const IMAGE_PLACEHOLDER_URL = 'https://loremflickr.com';
 

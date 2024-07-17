@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import Document, {
   DocumentContext,
   DocumentInitialProps,
@@ -15,6 +16,8 @@ interface DocumentAdditionalProps {
 }
 
 type DocumentProps = DocumentInitialProps & DocumentAdditionalProps;
+
+const { publicRuntimeConfig } = getConfig();
 
 export default class MyDocument extends Document<DocumentProps> {
   static async getInitialProps(context: DocumentContext) {
@@ -43,13 +46,13 @@ export default class MyDocument extends Document<DocumentProps> {
   }
 
   render() {
-    const { appName, author, language, languageDirection } = this.props;
+    const { language, languageDirection } = this.props;
 
     return (
       <Html lang={language} dir={languageDirection}>
         <Head>
-          <meta name="description" content={appName} />
-          <meta name="author" content={author} />
+          <meta name="description" content={publicRuntimeConfig.appName} />
+          <meta name="author" content={publicRuntimeConfig.author} />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body>

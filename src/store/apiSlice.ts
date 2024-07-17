@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_PEOPLE_URL } from '@/constants';
+import { API_BASE_URL } from '@/constants';
 import { isHydrateAction } from '@/utils/store';
 import { AppState, AppThunk } from './store';
 import { IPerson, IPersonList } from '@/models/IPerson';
@@ -9,7 +9,7 @@ import { IComment, IRawComment } from '@/models/IComment';
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api',
+    baseUrl: '/',
   }),
   extractRehydrationInfo: (action, { reducerPath }): any => {
     if (isHydrateAction(action)) {
@@ -19,12 +19,12 @@ export const apiSlice = createApi({
   tagTypes: ['PersonList', 'Person', 'PersonComments'],
   endpoints: (builder) => ({
     getPersonList: builder.query<IPersonList, number>({
-      query: (page) => `${API_PEOPLE_URL}?page=${page}`,
+      query: (page) => `${API_BASE_URL}/people?page=${page}`,
       providesTags: (result, error, page) => [{ type: 'PersonList', id: page }],
     }),
 
     getPerson: builder.query<IPerson, string>({
-      query: (id) => `${API_PEOPLE_URL}/${id}`,
+      query: (id) => `${API_BASE_URL}/people/${id}`,
       providesTags: (result, error, id) => [{ type: 'Person', id }],
     }),
 
@@ -33,7 +33,7 @@ export const apiSlice = createApi({
       { id: string; patch: Partial<Omit<IPerson, 'id'>> }
     >({
       query: ({ id, patch }) => ({
-        url: `${API_PEOPLE_URL}/${id}`,
+        url: `${API_BASE_URL}/people/${id}`,
         method: 'PUT',
         body: patch,
       }),
@@ -48,7 +48,7 @@ export const apiSlice = createApi({
     }),
 
     getPersonComments: builder.query<IComment[], string>({
-      query: (id) => `${API_PEOPLE_URL}/${id}/comments`,
+      query: (id) => `${API_BASE_URL}/people/${id}/comments`,
       providesTags: (result, error, id) => [{ type: 'PersonComments', id }],
     }),
 
@@ -57,7 +57,7 @@ export const apiSlice = createApi({
       { id: string; comment: IRawComment }
     >({
       query: ({ id, comment }) => ({
-        url: `${API_PEOPLE_URL}/${id}/comments`,
+        url: `${API_BASE_URL}/people/${id}/comments`,
         method: 'POST',
         body: comment,
       }),

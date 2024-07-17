@@ -1,6 +1,5 @@
 import cacheData from 'memory-cache';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { API_BASE_URL, API_PEOPLE_URL } from '@/constants';
 import { IPerson, IPersonList } from '@/models/IPerson';
 import { IComment, IRawComment } from '@/models/IComment';
 import { getPersonId } from '@/utils/person';
@@ -21,7 +20,9 @@ const saveCache = () => {
 
 const getPeople = async (page: string, res: NextApiResponse) => {
   if (!LIST_CACHE[page]) {
-    const result = await fetch(`${API_BASE_URL}${API_PEOPLE_URL}?page=${page}`);
+    const result = await fetch(
+      `${process.env.EXTERNAL_API_URL}/people?page=${page}`
+    );
     const data = await result.json();
     LIST_CACHE[page] = {
       ...data,
@@ -37,7 +38,7 @@ const getPeople = async (page: string, res: NextApiResponse) => {
 
 const getPerson = async (id: string, res: NextApiResponse) => {
   if (!PERSON_CACHE[id]) {
-    const result = await fetch(`${API_BASE_URL}${API_PEOPLE_URL}/${id}`);
+    const result = await fetch(`${process.env.EXTERNAL_API_URL}/people/${id}`);
     const data = await result.json();
     PERSON_CACHE[id] = {
       ...data,
