@@ -25,7 +25,7 @@ export const PersonCard = ({
       className={styles.logo}
       href={getRouterUrl(`${PERSON_FORM_ROUTE}/${person.id}`, { page })}
     >
-      <Avatar className={styles.avatar} value={person.name} />
+      <Avatar className={styles.avatar} person={person} />
     </Link>
     <BlackLink
       className={styles.title}

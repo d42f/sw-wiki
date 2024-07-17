@@ -7,6 +7,7 @@ import {
   isRejectedWithValue,
 } from '@reduxjs/toolkit';
 import { apiSlice } from './apiSlice';
+import { createWrapper } from 'next-redux-wrapper';
 
 export const errorHandlerMiddleware: Middleware = () => (next) => (action) => {
   if (isRejectedWithValue(action)) {
@@ -19,7 +20,7 @@ const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
-export const makeStore = () =>
+const makeStore = () =>
   configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
@@ -29,11 +30,11 @@ export const makeStore = () =>
       ),
   });
 
-export const store = makeStore();
+export type AppStore = ReturnType<typeof makeStore>;
 
-export type AppState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<AppStore['getState']>;
 
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = AppStore['dispatch'];
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -41,3 +42,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+
+export const wrapper = createWrapper<AppStore>(makeStore, { debug: false });

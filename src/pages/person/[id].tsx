@@ -4,18 +4,35 @@ import { PERSON_LIST_ROUTE } from '@/constants';
 import { PageNavbar, PageNavbarLink } from '@/components/PageNavbar';
 import { PageContainer } from '@/components/PageContainer';
 import { PersonForm } from '@/components/PersonForm';
+import { IPerson } from '@/models/IPerson';
+import { wrapper } from '@/store';
 import {
+  getPerson,
+  getRunningQueriesThunk,
   useGetPersonQuery,
   useUpdatePersonMutation,
-} from '@/store/personsSlice';
-import { IPerson } from '@/models/IPerson';
+} from '@/store/apiSlice';
 import { getRouterUrl } from '@/utils/router';
+import { isString } from '@/utils/string';
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const id = context.query.id;
+    if (isString(id)) {
+      store.dispatch(getPerson.initiate(id));
+    }
+    await Promise.all(store.dispatch(getRunningQueriesThunk()));
+    return { props: {} };
+  }
+);
 
 export default function Person() {
-  const { query, push } = useRouter();
+  const { isReady, query, push } = useRouter();
   const id = (query.id || '').toString();
   const page = (query.page || '').toString();
-  const { data: person, isLoading } = useGetPersonQuery(id, { skip: !id });
+  const { data: person, isLoading } = useGetPersonQuery(id, {
+    skip: !isReady || !id,
+  });
   const [updatePerson] = useUpdatePersonMutation();
 
   const backLink = useMemo(
@@ -34,7 +51,7 @@ export default function Person() {
         <PageNavbarLink href={backLink}>← Back</PageNavbarLink>
       </PageNavbar>
       <PageContainer lg={{ span: 8, offset: 2 }} xl={{ span: 6, offset: 3 }}>
-        {isLoading ? (
+        {!isReady || isLoading ? (
           <span>Loading...</span>
         ) : !person ? (
           <span>Invalid link</span>

@@ -1,21 +1,33 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { PAGES_LIMIT, PAGES_START } from '@/constants';
 import { PageNavbar } from '@/components/PageNavbar';
 import { PageContainer } from '@/components/PageContainer';
 import { PersonList, PersonListPlaceholder } from '@/components/PersonList';
-import { IPersonList } from '@/models/IPerson';
-import { useGetPersonListQuery } from '@/store/personsSlice';
+import {
+  getPersonList,
+  getRunningQueriesThunk,
+  useGetPersonListQuery,
+} from '@/store/apiSlice';
+import { wrapper } from '@/store';
+import { toNumber } from '@/utils/number';
 import { getRouterUrl } from '@/utils/router';
 
-const START_PAGE = 1;
-const PAGE_LIMIT = 10;
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const page = toNumber(context.query.page) || PAGES_START;
+    store.dispatch(getPersonList.initiate(page));
+    await Promise.all(store.dispatch(getRunningQueriesThunk()));
+    return { props: {} };
+  }
+);
 
-export default function Home() {
-  const { route, query, replace } = useRouter();
-  const currentPage = query.page && isFinite(+query.page) ? +query.page : 0;
-  const { data: personList, isLoading } = useGetPersonListQuery(
-    currentPage || START_PAGE
-  );
+export default function Index() {
+  const { isFallback, isReady, route, query, replace } = useRouter();
+  const page = toNumber(query.page) || PAGES_START;
+  const { data: personList, isFetching } = useGetPersonListQuery(page, {
+    skip: !isReady || isFallback,
+  });
 
   useEffect(() => {
     if (query.highlighting) {
@@ -31,15 +43,15 @@ export default function Home() {
     <>
       <PageNavbar />
       <PageContainer lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
-        {isLoading ? (
+        {!isReady || isFallback || isFetching ? (
           <PersonListPlaceholder />
         ) : !personList?.results.length ? (
           <span>No data</span>
         ) : (
           <PersonList
-            personList={personList as IPersonList}
-            currentPage={currentPage}
-            limit={PAGE_LIMIT}
+            personList={personList}
+            currentPage={page}
+            limit={PAGES_LIMIT}
             highlightId={query.highlighting as string}
           />
         )}
