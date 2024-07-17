@@ -12,16 +12,18 @@ export const PersonFormPlaceholder = ({
   className,
 }: PersonFormPlaceholderProps): JSX.Element => (
   <Stack className={classNames(styles.wrapper, className)} gap={3}>
-    <Placeholder className={styles.title} animation="glow">
-      <Placeholder className={styles.titlePlaceholder} />
-    </Placeholder>
+    <Placeholder className={styles.titlePlaceholder} />
     {FIELDS.map(({ size }, index) => (
       <Row key={index}>
         <Col sm={2}>
-          <Placeholder className={styles.labelPlaceholder} />
+          <Placeholder animation="glow">
+            <Placeholder className={styles.labelPlaceholder} />
+          </Placeholder>
         </Col>
         <Col sm={size}>
-          <Placeholder className={styles.controlPlaceholder} />
+          <Placeholder animation="glow">
+            <Placeholder className={styles.controlPlaceholder} />
+          </Placeholder>
         </Col>
       </Row>
     ))}

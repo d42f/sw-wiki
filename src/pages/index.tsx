@@ -46,7 +46,7 @@ export default function Index() {
       <PageNavbar />
       <PageContainer lg={{ span: 10, offset: 1 }} xl={{ span: 8, offset: 2 }}>
         {!isReady || isFallback || isFetching ? (
-          <PersonListPlaceholder />
+          <PersonListPlaceholder cards={4} />
         ) : !personList?.results.length ? (
           <span>No data</span>
         ) : (
