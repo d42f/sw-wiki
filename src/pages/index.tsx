@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { PAGES_LIMIT, PAGES_START } from '@/constants';
 import { PageNavbar } from '@/components/PageNavbar';
@@ -24,7 +24,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 export default function Index() {
   const { isFallback, isReady, route, query, replace } = useRouter();
-  const highlightingIdRef = useRef<string>();
   const page = toNumber(query.page) || PAGES_START;
   const { data: personList, isFetching } = useGetPersonListQuery(page, {
     skip: !isReady || isFallback,
@@ -32,7 +31,6 @@ export default function Index() {
 
   useEffect(() => {
     if (query.highlighting) {
-      highlightingIdRef.current = query.highlighting as string;
       replace(
         getRouterUrl(route, { ...query, highlighting: undefined }),
         undefined,
@@ -54,7 +52,7 @@ export default function Index() {
             personList={personList}
             currentPage={page}
             limit={PAGES_LIMIT}
-            highlightId={highlightingIdRef.current}
+            highlightId={query.highlighting as string}
           />
         )}
       </PageContainer>

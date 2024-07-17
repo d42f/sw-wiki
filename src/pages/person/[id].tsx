@@ -20,6 +20,7 @@ import {
 } from '@/store/apiSlice';
 import { getRouterUrl } from '@/utils/router';
 import { isString } from '@/utils/string';
+import { toNumber } from '@/utils/number';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -34,8 +35,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 export default function Person() {
   const { isReady, query, push } = useRouter();
-  const id = (query.id || '').toString();
-  const page = (query.page || '').toString();
+  const id = query.id as string;
+  const page = toNumber(query.page);
 
   const { data: person, isLoading: isPersonLoading } = useGetPersonQuery(id, {
     skip: !isReady || !id,
@@ -56,7 +57,12 @@ export default function Person() {
 
   const handlePersonSave = async (patch: IPerson) => {
     await updatePerson({ id, patch });
-    push(getRouterUrl(PERSON_LIST_ROUTE, { page, highlighting: id }));
+    push(
+      getRouterUrl(PERSON_LIST_ROUTE, {
+        page: page !== 1 ? page : undefined,
+        highlighting: id,
+      })
+    );
   };
 
   const handleCommentSave = async (comment: IRawComment) => {
