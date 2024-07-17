@@ -1,0 +1,38 @@
+.form {
+  display: flex;
+  flex-flow: column nowrap;
+  row-gap: 1rem;
+}
+
+.title {
+  margin: 0;
+}
+
+.titlePlaceholder {
+  width: 50%;
+  height: calc((1.325rem + 0.9vw) * 1.2);
+}
+
+.labelPlaceholder {
+  width: 100%;
+  height: calc(1rem * 1.5);
+}
+
+.controlPlaceholder {
+  width: 100%;
+  height: calc(0.375rem * 2 + 1rem * 1.5);
+}
+
+.buttonPlaceholder {
+  width: 100px;
+  height: calc(0.375rem * 2 + 1rem * 1.5);
+}
+
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+  column-gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bs-gray-100);
+  border-top: 1px solid var(--bs-gray-300);
+}

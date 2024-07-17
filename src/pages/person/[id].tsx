@@ -4,8 +4,11 @@ import { Card, Stack } from 'react-bootstrap';
 import { PERSON_LIST_ROUTE } from '@/constants';
 import { PageNavbar, PageNavbarLink } from '@/components/PageNavbar';
 import { PageContainer } from '@/components/PageContainer';
-import { PersonForm } from '@/components/PersonForm';
+import { PersonForm, PersonFormPlaceholder } from '@/components/PersonForm';
+import { CommentForm } from '@/components/CommentForm';
+import { CommentList } from '@/components/CommentList';
 import { IPerson } from '@/models/IPerson';
+import { IRawComment } from '@/models/IComment';
 import { wrapper } from '@/store';
 import {
   getPerson,
@@ -17,9 +20,6 @@ import {
 } from '@/store/apiSlice';
 import { getRouterUrl } from '@/utils/router';
 import { isString } from '@/utils/string';
-import { CommentForm } from '@/components/CommentForm';
-import { IRawComment } from '@/models/IComment';
-import { CommentList } from '@/components/CommentList';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -41,7 +41,7 @@ export default function Person() {
     skip: !isReady || !id,
   });
 
-  const { data: comments, isLoading } = useGetPersonCommentsQuery(id, {
+  const { data: comments } = useGetPersonCommentsQuery(id, {
     skip: !person,
   });
 
@@ -71,8 +71,8 @@ export default function Person() {
         <PageNavbarLink href={backLink}>← Back</PageNavbarLink>
       </PageNavbar>
       <PageContainer lg={{ span: 8, offset: 2 }} xl={{ span: 6, offset: 3 }}>
-        {!isReady || isPersonLoading ? (
-          <span>Loading...</span>
+        {!isReady || isPersonLoading || 1 ? (
+          <PersonFormPlaceholder />
         ) : !person ? (
           <span>Invalid link</span>
         ) : (

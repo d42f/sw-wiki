@@ -2,57 +2,9 @@ import React from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import classNames from 'classnames';
-import { IPerson, EPersonGender } from '@/models/IPerson';
+import { IPerson } from '@/models/IPerson';
+import { FIELDS } from './constants';
 import styles from './PersonForm.module.css';
-import { IFormField } from '@/models/IForm';
-
-const FIELDS: IFormField[] = [
-  {
-    id: 'name',
-    label: 'Name',
-    placeholder: 'Enter name',
-    required: true,
-  },
-  {
-    id: 'gender',
-    type: 'select',
-    label: 'Gender',
-    placeholder: 'Select gender',
-    options: Object.entries(EPersonGender).map(([label, value]) => ({
-      value,
-      label,
-    })),
-  },
-  {
-    id: 'birth_year',
-    label: 'Birth year',
-    placeholder: 'Enter birth year',
-  },
-  {
-    id: 'hair_color',
-    label: 'Hair color',
-    placeholder: 'Enter hair color',
-  },
-  {
-    id: 'skin_color',
-    label: 'Skin color',
-    placeholder: 'Enter skin color',
-  },
-  {
-    id: 'height',
-    type: 'number',
-    label: 'Height',
-    placeholder: 'Enter height',
-    size: 4,
-  },
-  {
-    id: 'mass',
-    type: 'number',
-    label: 'Mass',
-    placeholder: 'Enter mass',
-    size: 4,
-  },
-];
 
 interface PersonFormProps {
   className?: string;

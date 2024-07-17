@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 
-import { IPerson, PersonGender } from '@/models/IPerson';
+import { IPerson, EPersonGender } from '@/models/IPerson';
 import { makeStore } from '@/store';
 import { PersonForm } from './PersonForm';
 
@@ -12,7 +12,7 @@ const person: IPerson = {
   id: '1',
   birth_year: '19BBY',
   eye_color: 'blue',
-  gender: PersonGender.Male,
+  gender: EPersonGender.Male,
   hair_color: 'blond',
   height: 172,
   mass: 77,
