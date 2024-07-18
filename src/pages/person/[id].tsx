@@ -36,7 +36,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 export default function Person() {
   const { isReady, query, push } = useRouter();
   const id = query.id as string;
-  const page = toNumber(query.page);
+  const page = toNumber(query.page) !== 1 ? toNumber(query.page) : undefined;
 
   const { data: person, isLoading: isPersonLoading } = useGetPersonQuery(id, {
     skip: !isReady || !id,
@@ -51,19 +51,13 @@ export default function Person() {
     useAddPersonCommentMutation();
 
   const backLink = useMemo(
-    () =>
-      getRouterUrl(PERSON_LIST_ROUTE, { page: page !== 1 ? page : undefined }),
+    () => getRouterUrl(PERSON_LIST_ROUTE, { page }),
     [page]
   );
 
   const handlePersonSave = async (patch: IPerson) => {
     await updatePerson({ id, patch });
-    push(
-      getRouterUrl(PERSON_LIST_ROUTE, {
-        page: page !== 1 ? page : undefined,
-        highlighting: id,
-      })
-    );
+    push(getRouterUrl(PERSON_LIST_ROUTE, { page, highlighting: id }));
   };
 
   const handleCommentSave = async (comment: IRawComment) => {
