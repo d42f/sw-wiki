@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import Link from 'next/link';
+import getConfig from 'next/config';
+
+const { publicRuntimeConfig } = getConfig();
 
 interface PageNavbarProps {
   className?: string;
@@ -14,7 +17,7 @@ export const PageNavbar = ({
   <Navbar className={className} bg="dark" variant="dark">
     <Container>
       <Navbar.Brand as={Link} href="/">
-        SW Wiki
+        {publicRuntimeConfig.appName}
       </Navbar.Brand>
       {children && <Nav className="me-auto">{children}</Nav>}
     </Container>
