@@ -20,7 +20,7 @@ export const PersonDescription = ({
 }: PersonDescriptionProps): JSX.Element => (
   <div className={classNames(styles.wrapper, className)}>
     {Object.entries(LABELS).map(([key, label]) => (
-      <Row key={key}>
+      <Row className="m-0" key={key} as="dl">
         <dt className="col-sm-3">{label}</dt>
         <dd className="col-sm-9">{person[key as keyof IPerson].toString()}</dd>
       </Row>
