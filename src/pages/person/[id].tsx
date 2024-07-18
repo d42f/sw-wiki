@@ -51,7 +51,8 @@ export default function Person() {
     useAddPersonCommentMutation();
 
   const backLink = useMemo(
-    () => getRouterUrl(PERSON_LIST_ROUTE, { page }),
+    () =>
+      getRouterUrl(PERSON_LIST_ROUTE, { page: page !== 1 ? page : undefined }),
     [page]
   );
 
