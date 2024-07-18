@@ -60,13 +60,13 @@ export const PersonForm = ({
                 size,
               }) => (
                 <Form.Group key={id} as={Row}>
-                  <Form.Label column sm={3}>
+                  <Form.Label htmlFor={id} column sm={3}>
                     {label}
                   </Form.Label>
                   <Col sm={size || 9}>
                     {['text', 'number'].includes(type) ? (
                       <Form.Control
-                        role={id}
+                        id={id}
                         type={type}
                         placeholder={placeholder}
                         isInvalid={!!errors[id]}
@@ -76,7 +76,7 @@ export const PersonForm = ({
                         })}
                       />
                     ) : type === 'select' ? (
-                      <Form.Select role={id} {...register(id)}>
+                      <Form.Select id={id} {...register(id)}>
                         {options.map(({ value, label }) => (
                           <option key={value} value={value}>
                             {label}
@@ -100,7 +100,7 @@ export const PersonForm = ({
       </Row>
 
       <div className={styles.footer}>
-        <Button variant="primary" type="submit" role="submit">
+        <Button variant="primary" type="submit">
           Save
         </Button>
         <Button variant="light" type="button" onClick={onClose}>

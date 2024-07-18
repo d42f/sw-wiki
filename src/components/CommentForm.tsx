@@ -37,11 +37,12 @@ export const CommentForm = ({
     >
       {title && <h4 className={styles.title}>{title}</h4>}
       <Form.Group as={Row}>
-        <Form.Label column sm={2}>
+        <Form.Label htmlFor="text" column sm={2}>
           Message
         </Form.Label>
         <Col>
           <Form.Control
+            id="text"
             as="textarea"
             rows={3}
             isInvalid={!!errors.text}
@@ -60,7 +61,6 @@ export const CommentForm = ({
       <Stack direction="horizontal" gap={2}>
         <Button
           className="ms-auto"
-          role="submit"
           type="submit"
           disabled={disabled}
           variant="secondary"
