@@ -46,8 +46,9 @@ export default function Person() {
     skip: !person,
   });
 
-  const [updatePerson] = useUpdatePersonMutation();
-  const [addPersonComment, { isLoading: isCommentLoading }] =
+  const [updatePerson, { isLoading: isPersonSaving }] =
+    useUpdatePersonMutation();
+  const [addPersonComment, { isLoading: isCommentAdding }] =
     useAddPersonCommentMutation();
 
   const backLink = useMemo(
@@ -80,6 +81,7 @@ export default function Person() {
           <Stack gap={5}>
             <PersonForm
               value={person}
+              disabled={isPersonSaving}
               onSave={handlePersonSave}
               onClose={() => push(backLink)}
             />
@@ -87,7 +89,7 @@ export default function Person() {
               {<Card.Header>Add comment</Card.Header>}
               <Card.Body>
                 <CommentForm
-                  disabled={isCommentLoading}
+                  disabled={isCommentAdding}
                   onSave={handleCommentSave}
                 />
               </Card.Body>

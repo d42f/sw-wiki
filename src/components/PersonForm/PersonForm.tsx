@@ -12,6 +12,7 @@ import { rgbDataURL } from '@/utils/image';
 interface PersonFormProps {
   className?: string;
   value: IPerson;
+  disabled?: boolean;
   onSave: (value: IPerson) => void;
   onClose: () => void;
 }
@@ -19,6 +20,7 @@ interface PersonFormProps {
 export const PersonForm = ({
   className,
   value,
+  disabled,
   onSave,
   onClose,
 }: PersonFormProps): JSX.Element => {
@@ -48,7 +50,7 @@ export const PersonForm = ({
           />
         </Col>
         <Col sm={8}>
-          <Stack gap={3}>
+          <Stack gap={3} as="fieldset" disabled={disabled}>
             {FIELDS.map(
               ({
                 id,
@@ -99,14 +101,14 @@ export const PersonForm = ({
         </Col>
       </Row>
 
-      <div className={styles.footer}>
+      <fieldset className={styles.footer} disabled={disabled}>
         <Button variant="primary" type="submit">
           Save
         </Button>
         <Button variant="light" type="button" onClick={onClose}>
           Cancel
         </Button>
-      </div>
+      </fieldset>
     </Form>
   );
 };
